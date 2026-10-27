@@ -61,7 +61,8 @@ def _list(s: pd.Series) -> list:
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "data_source": elexon.source}
+    return {"status": "ok", "data_source": elexon.source,
+            "snapshot_available": elexon.SNAPSHOT.exists()}
 
 
 @app.get("/api/day")
