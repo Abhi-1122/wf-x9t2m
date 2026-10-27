@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import analysis
+from . import analysis, elexon
 from .elexon import ElexonError, load_data
 
 # Decision-time presets shown in the comparison table (gate closures, UK time).
@@ -61,7 +61,7 @@ def _list(s: pd.Series) -> list:
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "data_source": elexon.source}
 
 
 @app.get("/api/day")

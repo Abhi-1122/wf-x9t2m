@@ -55,7 +55,7 @@ The first API request downloads about 3.5 MB from Elexon and caches it in memory
 ### Tests and lint
 
 ```bash
-pytest                          # backend unit tests on synthetic data (no network)
+pytest                          # unit tests plus an end-to-end check on the bundled snapshot (no network)
 ruff check .
 cd frontend && npm run build    # type-check and production build
 ```
@@ -82,10 +82,11 @@ GitHub Actions runs all three on every push (`.github/workflows/ci.yml`).
 
 ```
 api/index.py                 Vercel entry point; exposes the FastAPI app
-backend/app/elexon.py        Fetches FUELHH and WINDFOR once and caches them in memory
+backend/app/elexon.py        Fetches FUELHH and WINDFOR once, caches them, falls back to the snapshot
+backend/app/data/            Gzipped copy of the Elexon data (164 kB), used when Elexon is unreachable
 backend/app/analysis.py      Pure functions: run selection, error pairing, trailing statistics, metrics
 backend/app/main.py          FastAPI routes and input validation; serves frontend/dist when present
-backend/tests/               pytest tests for the analysis functions (synthetic data, no network)
+backend/tests/               pytest: analysis rules on synthetic data, and the full pipeline on the snapshot
 backend/requirements-dev.txt Test and lint tools (pytest, ruff)
 requirements.txt             Runtime dependencies (used by Docker and Vercel)
 frontend/src/App.tsx         Layout, tabs and the shared day / decision-time controls
@@ -106,7 +107,7 @@ vercel.json                  Builds the frontend; Vercel serves api/index.py as 
 ### System
 
 - **One FastAPI service.** It exposes the JSON API under `/api` and, in Docker, also serves the built React app, so a single container runs everything. On Vercel, the CDN serves the React build as static files and `/api/*` runs as a Python serverless function (`api/index.py`).
-- **No database.** The dataset is about 3.5 MB and historical, so the backend fetches it from Elexon on first use and caches it per process (`functools.lru_cache`). It caches per-decision-time results the same way.
+- **No database.** The dataset is about 3.5 MB and historical, so the backend fetches it from Elexon on first use and caches it per process (`functools.lru_cache`). It caches per-decision-time results the same way. If Elexon is unreachable, the backend loads a 164 kB gzipped copy of the same data from `backend/app/data/`, so the demo keeps working; `/api/health` reports which source is in use. Refresh the copy with `python -m app.elexon` from `backend/`.
 - **Pure analysis core.** `analysis.py` does no I/O. Every rule (run selection, the no-look-ahead window, metrics) is a small function with a unit test on hand-built data, so the logic can be checked without the network.
 - **Typed frontend.** React with TypeScript and Recharts. `api.ts` types every response. The fetch hook cancels stale requests when inputs change, and the UI shows loading and error states.
 
