@@ -93,7 +93,7 @@ frontend/src/DayView.tsx     Day-ahead view
 frontend/src/AccuracyView.tsx  Forecast accuracy view
 frontend/src/api.ts          Response types and a small fetch hook
 frontend/src/ui.tsx, format.ts, styles.css  Shared components, UK-time formatting, styling
-docs/                        Screenshots used in this README
+docs/                        Screenshots and the architecture diagram
 Dockerfile                   Multi-stage: Node builds the UI, Python slim serves UI and API
 vercel.json                  Builds the frontend; Vercel serves api/index.py as the Python function
 .github/workflows/ci.yml     ruff, pytest and the frontend build
@@ -101,10 +101,21 @@ vercel.json                  Builds the frontend; Vercel serves api/index.py as 
 
 ## Design
 
+![Architecture](docs/architecture.svg)
+
+### System
+
 - **One FastAPI service.** It exposes the JSON API under `/api` and, in Docker, also serves the built React app, so a single container runs everything. On Vercel, the CDN serves the React build as static files and `/api/*` runs as a Python serverless function (`api/index.py`).
 - **No database.** The dataset is about 3.5 MB and historical, so the backend fetches it from Elexon on first use and caches it per process (`functools.lru_cache`). It caches per-decision-time results the same way.
 - **Pure analysis core.** `analysis.py` does no I/O. Every rule (run selection, the no-look-ahead window, metrics) is a small function with a unit test on hand-built data, so the logic can be checked without the network.
 - **Typed frontend.** React with TypeScript and Recharts. `api.ts` types every response. The fetch hook cancels stale requests when inputs change, and the UI shows loading and error states.
+
+### Domain decisions
+
+- **Use the run published at or before the gate.** A trader works from what Elexon has published by the gate. At 09:20 that is the 07:30 run, because the 09:30 run lands 10 minutes late.
+- **Join on the hourly `startTime`.** `WINDFOR` is hourly and `FUELHH` is half-hourly. Matching each forecast hour to the half-hour that starts on the hour gives a rule a reviewer can check by hand.
+- **No look-ahead.** The bias correction and the band use the 14 delivery days with complete actuals before the decision. That window gave the best-calibrated band (82% coverage against a nominal 80%). The Methodology section compares 7, 14, 21 and 28 days.
+- **December warm-up.** Two weeks of December data give 2 January a full window, so every January day follows the same rule. A trader deciding on 1 January already knows December's errors, so this data stays relevant to January decisions.
 
 ## Methodology
 

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="468" viewBox="0 0 980 468" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8a8984"/>
+    </marker>
+    <style>
+      .title { font-size: 14px; font-weight: 600; fill: #0b0b0b; }
+      .mono { font-family: SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; font-weight: 600; fill: #0b0b0b; }
+      .desc { font-size: 12px; fill: #52514e; }
+      .label { font-size: 11px; letter-spacing: 0.06em; fill: #52514e; font-weight: 600; }
+      .edge { font-size: 11px; fill: #52514e; }
+      .line { stroke: #8a8984; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="980" height="468" rx="12" fill="#fcfcfb"/>
+
+  <!-- External source -->
+  <rect x="24" y="56" width="180" height="120" rx="8" fill="#f5f5f3" stroke="#b9b8b2" stroke-dasharray="4 3"/>
+  <text x="40" y="82" class="title">Elexon BMRS API</text>
+  <text x="40" y="108" class="mono">FUELHH</text>
+  <text x="40" y="125" class="desc">actual wind, half-hourly</text>
+  <text x="40" y="149" class="mono">WINDFOR</text>
+  <text x="40" y="166" class="desc">forecast runs, hourly</text>
+
+  <!-- Tests -->
+  <rect x="24" y="192" width="180" height="60" rx="8" fill="#f5f5f3" stroke="#e3e2dd"/>
+  <text x="40" y="216" class="mono">pytest</text>
+  <text x="40" y="237" class="desc">synthetic data, no network</text>
+
+  <!-- Backend group -->
+  <rect x="250" y="40" width="470" height="304" rx="10" fill="#ffffff" stroke="#e3e2dd"/>
+  <text x="270" y="66" class="label">BACKEND · FASTAPI (PYTHON)</text>
+
+  <rect x="270" y="84" width="430" height="60" rx="8" fill="#eef5fd" stroke="#c9dcf3"/>
+  <text x="286" y="108" class="mono">elexon.py</text>
+  <text x="286" y="128" class="desc">Fetches both datasets once and caches them in memory</text>
+
+  <rect x="270" y="170" width="430" height="60" rx="8" fill="#eef5fd" stroke="#c9dcf3"/>
+  <text x="286" y="194" class="mono">analysis.py</text>
+  <text x="286" y="214" class="desc">Pure functions: run selection, hourly errors, trailing stats, metrics</text>
+
+  <rect x="270" y="256" width="430" height="60" rx="8" fill="#eef5fd" stroke="#c9dcf3"/>
+  <text x="286" y="280" class="mono">main.py</text>
+  <text x="286" y="300" class="desc">GET /api/day, /api/accuracy · input validation · 422 / 502 errors</text>
+
+  <!-- Frontend -->
+  <text x="760" y="210" class="label">FRONTEND · BROWSER</text>
+  <rect x="760" y="222" width="196" height="124" rx="8" fill="#eef5fd" stroke="#c9dcf3"/>
+  <text x="776" y="248" class="title">React + TypeScript</text>
+  <text x="776" y="274" class="desc">Day-ahead view</text>
+  <text x="776" y="294" class="desc">Forecast accuracy view</text>
+  <text x="776" y="324" class="desc">Recharts · plain CSS</text>
+
+  <!-- Edges -->
+  <path d="M204 114 H266" class="line" marker-end="url(#arrow)"/>
+  <text x="214" y="106" class="edge">HTTPS</text>
+  <path d="M485 144 V166" class="line" marker-end="url(#arrow)"/>
+  <path d="M485 230 V252" class="line" marker-end="url(#arrow)"/>
+  <path d="M204 214 H266" class="line" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+  <text x="216" y="206" class="edge">tests</text>
+  <path d="M700 286 H756" class="line" marker-end="url(#arrow)"/>
+  <text x="716" y="278" class="edge">JSON</text>
+
+  <!-- Deployment -->
+  <text x="24" y="378" class="label">DEPLOYMENT</text>
+  <rect x="24" y="390" width="460" height="54" rx="8" fill="#f5f5f3" stroke="#e3e2dd"/>
+  <text x="40" y="412" class="title">Docker</text>
+  <text x="40" y="431" class="desc">Node stage builds the UI; Python stage serves UI and API on :8000</text>
+  <rect x="496" y="390" width="460" height="54" rx="8" fill="#f5f5f3" stroke="#e3e2dd"/>
+  <text x="512" y="412" class="title">Vercel</text>
+  <text x="512" y="431" class="desc">CDN serves frontend/dist; api/index.py runs FastAPI as a function</text>
+</svg>
