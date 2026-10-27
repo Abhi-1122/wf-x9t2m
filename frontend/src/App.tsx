@@ -115,8 +115,9 @@ export default function App() {
 
         <footer className="footnote">
           Source: Elexon BMRS, FUELHH (actual wind, half-hourly) and WINDFOR (wind forecast,
-          hourly). Error = forecast minus actual. A positive error means the forecast overstated
-          wind, so you needed more non-wind power.
+          hourly). Gate times: EPEX SPOT (09:20 hourly, 15:30 half-hourly) and Nord Pool N2EX (09:50).
+          Error = forecast minus actual. A positive error means the forecast overstated wind, so
+          you needed more non-wind power.
         </footer>
       </main>
     </>

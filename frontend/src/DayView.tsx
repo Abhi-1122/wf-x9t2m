@@ -70,7 +70,7 @@ export default function DayView({ date, decision }: { date: string; decision: st
           note={
             missDelta === null
               ? "Some actuals are missing for this day"
-              : `The forecast was ${Math.abs(missDelta * 100).toFixed(0)}% ${missDelta > 0 ? "too high" : "too low"}. You would not have known this at decision time.`
+              : `Elexon FUELHH, matched to the forecast hours. The forecast was ${Math.abs(missDelta * 100).toFixed(0)}% ${missDelta > 0 ? "too high" : "too low"}.`
           }
         />
       </div>
