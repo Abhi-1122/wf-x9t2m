@@ -16,7 +16,7 @@ from .elexon import ElexonError, load_data
 PRESETS = ["09:20", "09:50", "15:30"]
 DIST = Path(__file__).resolve().parents[2] / "frontend" / "dist"
 
-app = FastAPI(title="UK day-ahead wind forecast monitor")
+app = FastAPI(title="GateWind: UK day-ahead wind forecast monitor")
 
 
 @app.exception_handler(ElexonError)

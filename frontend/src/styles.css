@@ -78,3 +78,4 @@ tr.active td { background: #e9f1fb; }
 .daynav { display: flex; gap: 6px; }
 .daynav button { font: inherit; font-size: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; cursor: pointer; }
 .daynav button:disabled { opacity: 0.4; cursor: default; }
+.tagline { font-weight: 400; color: var(--ink-2); font-size: 16px; margin-left: 6px; }

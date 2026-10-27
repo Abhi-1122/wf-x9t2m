@@ -28,7 +28,9 @@ export default function App() {
     <>
       <header className="topbar">
         <div className="wrap">
-          <h1>UK Day-Ahead Wind Forecast Monitor</h1>
+          <h1>
+            GateWind <span className="tagline">UK day-ahead wind forecast monitor</span>
+          </h1>
           <p>
             Latest Elexon wind forecast available at decision time, and how accurate it has been.
             Decisions made in January 2026. All times are UK time.

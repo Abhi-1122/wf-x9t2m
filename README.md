@@ -1,4 +1,4 @@
-# UK Day-Ahead Wind Forecast Monitor
+# GateWind: UK Day-Ahead Wind Forecast Monitor
 
 A web app for a UK utility's day-ahead trading desk. Before the day-ahead auction closes, the desk decides how much non-wind power to buy for the next day. The app answers two questions:
 
@@ -7,7 +7,7 @@ A web app for a UK utility's day-ahead trading desk. Before the day-ahead auctio
 
 Scope: decisions made in **January 2026**, which covers delivery days 2 January to 1 February 2026. All data comes from Elexon BMRS: `FUELHH` (actual wind generation, half-hourly) and `WINDFOR` (wind forecast, hourly, 8 runs per day).
 
-**Live app:** _add the deployment URL here_
+**Live app:** https://gatewind.vercel.app
 
 ![Day-ahead view](docs/day-view.png)
 
@@ -33,8 +33,8 @@ All figures are for the 09:20 decision (EPEX GB hourly auction) over 744 deliver
 ### Docker (UI and API on one port)
 
 ```bash
-docker build -t wind-monitor .
-docker run -p 8000:8000 wind-monitor
+docker build -t gatewind .
+docker run -p 8000:8000 gatewind
 # open http://localhost:8000
 ```
 
@@ -95,7 +95,7 @@ frontend/src/api.ts          Response types and a small fetch hook
 frontend/src/ui.tsx, format.ts, styles.css  Shared components, UK-time formatting, styling
 docs/                        Screenshots used in this README
 Dockerfile                   Multi-stage: Node builds the UI, Python slim serves UI and API
-vercel.json                  Builds the frontend and routes /api/* to the FastAPI function
+vercel.json                  Builds the frontend; Vercel serves api/index.py as the Python function
 .github/workflows/ci.yml     ruff, pytest and the frontend build
 ```
 
