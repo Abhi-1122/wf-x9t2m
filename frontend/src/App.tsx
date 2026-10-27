@@ -32,8 +32,8 @@ export default function App() {
             GateWind <span className="tagline">UK day-ahead wind forecast monitor</span>
           </h1>
           <p>
-            Latest Elexon wind forecast available at decision time, and how accurate it has been.
-            Decisions made in January 2026. All times are UK time.
+            See the wind forecast you had at the auction gate, and how far you can trust it.
+            Covers decisions made in January 2026. All times are UK time.
           </p>
         </div>
       </header>
@@ -115,8 +115,8 @@ export default function App() {
 
         <footer className="footnote">
           Source: Elexon BMRS, FUELHH (actual wind, half-hourly) and WINDFOR (wind forecast,
-          hourly). Error = forecast minus actual: a positive error means wind was over-forecast,
-          so more non-wind power had to be bought.
+          hourly). Error = forecast minus actual. A positive error means the forecast overstated
+          wind, so you needed more non-wind power.
         </footer>
       </main>
     </>

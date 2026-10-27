@@ -49,7 +49,7 @@ export function Status(props: { loading: boolean; error?: string; hasData: boole
   if (props.loading && !props.hasData)
     return (
       <div className="status" role="status">
-        Loading data from Elexon... the first request can take up to a minute.
+        Loading data from Elexon. The first load takes a few seconds.
       </div>
     );
   return null;

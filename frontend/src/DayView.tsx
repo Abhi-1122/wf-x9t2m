@@ -69,15 +69,15 @@ export default function DayView({ date, decision }: { date: string; decision: st
           unit={kpis.actual_mwh === null ? undefined : "MWh"}
           note={
             missDelta === null
-              ? "Not all actuals are available"
-              : `The forecast was ${Math.abs(missDelta * 100).toFixed(0)}% ${missDelta > 0 ? "too high" : "too low"}. Not known at decision time.`
+              ? "Some actuals are missing for this day"
+              : `The forecast was ${Math.abs(missDelta * 100).toFixed(0)}% ${missDelta > 0 ? "too high" : "too low"}. You would not have known this at decision time.`
           }
         />
       </div>
 
       <Card
         title={`Wind forecast for ${longDate(date)}`}
-        subtitle={`The blue line is the forecast a trader has at the decision time. The dashed line removes the average error of the previous 14 delivery days (${trailWindow}). The shaded band spreads the forecast by the errors seen over the same days, so the actual should land inside it about 8 times in 10.`}
+        subtitle={`The blue line is the forecast you have at the decision time. The dashed line removes the average error of the previous 14 delivery days (${trailWindow}). The shaded band spreads the forecast by the errors seen over the same days, so the actual should land inside it about 8 times in 10.`}
       >
         <Legend
           items={[
@@ -160,7 +160,7 @@ export default function DayView({ date, decision }: { date: string; decision: st
         </ResponsiveContainer>
         <p className="note">
           The band, buffer and bias adjustment use delivery days whose actuals were complete
-          before the decision, so a trader could have computed them on the day. The Forecast
+          before the decision, so you could have computed them on the day. The Forecast
           accuracy tab checks how often the band contained the actual.
         </p>
       </Card>

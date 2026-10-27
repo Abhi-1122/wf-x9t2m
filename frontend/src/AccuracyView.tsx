@@ -47,7 +47,7 @@ export default function AccuracyView({ decision }: { decision: string }) {
             {gw(Math.abs(data.bias))} GW on average</strong> ({Math.abs(pctOfMean).toFixed(0)}% of
             mean wind output).{" "}
             {data.bias > 0 &&
-              "Buying against the raw forecast leaves the position short of power on average."}
+              "If you buy against the raw forecast, you end up short of power."}
           </li>
           <li>
             Removing the average error of the previous 14 days cuts the typical miss from{" "}
@@ -56,8 +56,8 @@ export default function AccuracyView({ decision }: { decision: string }) {
           </li>
           <li>
             The P10 to P90 band contained the actual in{" "}
-            <strong>{adj.band_coverage_pct.toFixed(0)}% of hours</strong> (80% expected), so it is
-            a usable basis for sizing a buffer.
+            <strong>{adj.band_coverage_pct.toFixed(0)}% of hours</strong> (80% expected), so you can
+            size a buffer from it.
           </li>
         </ul>
       </aside>
@@ -90,7 +90,7 @@ export default function AccuracyView({ decision }: { decision: string }) {
 
       <Card
         title="Decision-time comparison"
-        subtitle="Same accuracy measures if the decision were taken at each auction gate. A later decision can use a fresher forecast run."
+        subtitle="The same measures for each auction gate. A later gate gives you a fresher forecast run."
       >
         <table>
           <thead>
@@ -130,7 +130,7 @@ export default function AccuracyView({ decision }: { decision: string }) {
 
       <Card
         title="Error by delivery hour"
-        subtitle="Later hours are forecast further ahead of the decision, so this view mixes lead time with time-of-day effects."
+        subtitle="Later hours sit further from the decision, so this view mixes lead time with time of day."
       >
         <Legend items={errorSeries.map((s) => ({ ...s, kind: "box" as const }))} />
         <ResponsiveContainer width="100%" height={320}>
@@ -194,7 +194,7 @@ export default function AccuracyView({ decision }: { decision: string }) {
       </Card>
 
       <details className="card method">
-        <summary>How these numbers are calculated</summary>
+        <summary>How the app calculates these numbers</summary>
         <ul>
           <li>
             <strong>Forecast used:</strong> for each delivery day, the latest Elexon WINDFOR run
@@ -209,9 +209,9 @@ export default function AccuracyView({ decision }: { decision: string }) {
             RMSE weights large misses more, and bias is the average signed miss.
           </li>
           <li>
-            <strong>Bias adjustment and band:</strong> taken from the 14 delivery days before the
-            day before delivery, the last days fully known at decision time. No future data is
-            used.
+            <strong>Bias adjustment and band:</strong> the errors of the 14 delivery days ending
+            two days before delivery, the last days with complete actuals at decision time. The
+            app uses no data from after the decision.
           </li>
         </ul>
       </details>
