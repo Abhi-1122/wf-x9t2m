@@ -1,0 +1,59 @@
+"""Fetches wind actuals (FUELHH) and wind forecasts (WINDFOR) from Elexon BMRS.
+
+The assignment window is fixed (decisions made in January 2026, plus two weeks of
+December as warm-up for the trailing error statistics), so the whole dataset is
+about 3.5 MB. It is fetched once per process and cached in memory.
+"""
+from functools import lru_cache
+
+import httpx
+import pandas as pd
+
+BASE = "https://data.elexon.co.uk/bmrs/api/v1/datasets"
+TIMEOUT_S = 90
+
+
+class ElexonError(RuntimeError):
+    """Raised when the Elexon API cannot be reached or returns unusable data."""
+
+
+def _get(dataset: str, params: dict) -> pd.DataFrame:
+    url = f"{BASE}/{dataset}/stream"
+    try:
+        resp = httpx.get(url, params=params, timeout=TIMEOUT_S)
+        resp.raise_for_status()
+        rows = resp.json()
+    except (httpx.HTTPError, ValueError) as exc:
+        raise ElexonError(f"Could not load {dataset} from Elexon: {exc}") from exc
+    if not rows:
+        raise ElexonError(f"Elexon returned no {dataset} data for the requested window.")
+    return pd.DataFrame(rows)
+
+
+@lru_cache(maxsize=1)
+def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Return (forecasts, actuals), timestamps in UTC.
+
+    forecasts: publish_time, start_time, forecast   (MW, hourly)
+    actuals:   start_time, actual                   (MW, half-hourly)
+    """
+    fc = _get(
+        "WINDFOR",
+        {
+            "publishDateTimeFrom": "2025-12-15T00:00:00Z",
+            "publishDateTimeTo": "2026-02-01T23:59:59Z",
+        },
+    )
+    act = _get(
+        "FUELHH",
+        {"settlementDateFrom": "2025-12-17", "settlementDateTo": "2026-02-02", "fuelType": "WIND"},
+    )
+    fc = fc.rename(columns={"publishTime": "publish_time", "startTime": "start_time",
+                            "generation": "forecast"})
+    act = act.rename(columns={"startTime": "start_time", "generation": "actual"})
+    fc = fc[["publish_time", "start_time", "forecast"]].dropna()
+    act = act[["start_time", "actual"]].dropna()
+    for df in (fc, act):
+        df["start_time"] = pd.to_datetime(df["start_time"], utc=True)
+    fc["publish_time"] = pd.to_datetime(fc["publish_time"], utc=True)
+    return fc, act
