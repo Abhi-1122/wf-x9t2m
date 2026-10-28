@@ -22,7 +22,7 @@ All figures are for the 09:20 decision (EPEX GB hourly auction) over 744 deliver
 | Bias (mean forecast minus actual) | **+1.75 GW** | +0.50 GW |
 | Actual inside the P10 to P90 band | n/a | 82% of hours (80% expected) |
 
-- **The forecast runs high.** On average it was 1.75 GW above actual wind output, about 15% of the mean. It was too high in 85% of hours, so a desk that buys against the raw forecast ends up short of power in those hours. One plausible cause is curtailment: `FUELHH` reports metered output after constraint actions, and the forecast may not anticipate it.
+- **The forecast runs high.** On average it was 1.75 GW above actual wind output, about 15% of the mean. It was too high in 85% of hours, so a desk that buys against the raw forecast counts on wind that doesn't arrive, buys too little power and covers the gap at imbalance prices. One plausible cause is curtailment: `FUELHH` reports metered output after constraint actions, and the forecast may not anticipate it.
 - **A simple correction works.** The bias-adjusted forecast subtracts the forecast's average error over the previous 14 delivery days. It uses data published before the decision and cuts the typical miss by 26%.
 - **Correcting bias beats deciding later.** Moving the decision from 09:20 to the 15:30 half-hourly auction lowers MAE by 8% and leaves the bias at +1.71 GW. Correcting the bias gains more than six extra hours of forecast freshness.
 - **The band is calibrated.** The P10 to P90 band contained the actual in 82% of hours, against an expected 80%. Its P90 edge gives a defensible buffer for extra non-wind purchases.

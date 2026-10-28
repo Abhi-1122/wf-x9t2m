@@ -47,7 +47,7 @@ export default function AccuracyView({ decision }: { decision: string }) {
             {gw(Math.abs(data.bias))} GW on average</strong> ({Math.abs(pctOfMean).toFixed(0)}% of
             mean wind output).{" "}
             {data.bias > 0 &&
-              "If you buy against the raw forecast, you end up short of power."}
+              "If you buy against the raw forecast, you count on wind that doesn't arrive, so you buy too little power and cover the gap at imbalance prices."}
           </li>
           <li>
             Removing the average error of the previous 14 days cuts the typical miss from{" "}
